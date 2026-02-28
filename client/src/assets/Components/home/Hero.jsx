@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Hero from "../assets/Components/home/hero.jsx"
 const hero = () => {
     const {user} = useSelector(state =>state.auth)
      const [menuOpen, setMenuOpen] = React.useState(false);

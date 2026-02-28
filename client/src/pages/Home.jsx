@@ -1,6 +1,6 @@
 import React from 'react'
 import Banner from '../assets/Components/home/Banner.jsx'
-import Hero from '../assets/Components/home/hero.jsx'
+import Hero from '../assets/Components/home/Hero.jsx'
 import Features from '../assets/Components/home/Features.jsx'
 import Testimonial from '../assets/Components/home/Testimonial.jsx'
 import CallToAction from '../assets/Components/home/CallToAction.jsx'
