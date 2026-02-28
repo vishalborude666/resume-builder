@@ -5,7 +5,7 @@ import Features from '../assets/Components/home/Features.jsx'
 import Testimonial from '../assets/Components/home/Testimonial.jsx'
 import CallToAction from '../assets/Components/home/CallToAction.jsx'
 import Footer from '../assets/Components/home/Footer.jsx'
-import Login from './login.jsx'
+
 
 const Home = () => {
   return (
