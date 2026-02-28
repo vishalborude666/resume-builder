@@ -21,5 +21,11 @@ app.get('/',(req,res)=>res.send("server is running"))
 app.use('/api/users', userRouter)
 app.use('/api/resumes', resumeRouter)
 app.use('/api/ai',aiRouter)
+import cors from "cors";
 
+app.use(cors({
+  origin: "https://your-frontend-name.vercel.app",
+  credentials: true
+}));
+app.use(cors());
 app.listen(PORT,()=>console.log(`server is running on port ${PORT}`))
