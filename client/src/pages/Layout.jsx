@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 import Navbar from '../assets/Components/Navbar';
 import {useSelector} from 'react-redux'
 import { Loader } from 'lucide-react';
-import Login from './login';
+import Login from './Login';
 
 const Layout = () => {
 
