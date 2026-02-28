@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&display=swap');
+
+@import "tailwindcss";
+*{
+      font-family: "Montserrat", sans-serif;
+}
+
+@layer base {
+  button {
+    @apply cursor-pointer;
+  }
+
+  input:not([type="checkbox"]) {
+    @apply outline-none border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500;
+  }
+
+  textarea {
+    @apply outline-none border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500;
+  }
+
+
+}
