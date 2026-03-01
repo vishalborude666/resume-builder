@@ -1,17 +1,19 @@
 import { Lock, Mail, User2Icon } from 'lucide-react';
 import React from 'react'
-import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login, setLoading } from '../app/features/authSlice';
 import api from '../configs/api.js';
 import toast from 'react-hot-toast';
+
 const Login = () => {
-         const dispatch  = useDispatch()
-         const navigate = useNavigate()
-    const query = new  URLSearchParams(window.location.search)
+
+    const dispatch  = useDispatch()
+    const navigate = useNavigate()
+
+    const query = new URLSearchParams(window.location.search)
     const urlState = query.get('state')
-    const [state, setState] = React.useState(urlState||"login")
+    const [state, setState] = React.useState(urlState || "login")
 
     const [formData, setFormData] = React.useState({
         name: '',
@@ -21,68 +23,126 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        dispatch(setLoading(true))   // ✅ ensure loading true before request
+
         try {
-                const {data} = await api.post(`/api/users/${state}`, formData)
-                    // ensure payload matches auth slice: { token, user }
-                    dispatch(login({ token: data.token, user: data.user }))
-                    localStorage.setItem('token', data.token)
-                    toast.success(data.message)
-                    // mark loading false and navigate to app dashboard after successful auth
-                    dispatch(setLoading(false))
-                    navigate('/app')
+            const response = await api.post(`/api/users/${state}`, formData)
+            const data = response.data   // ✅ safer extraction
+
+            dispatch(login({ token: data.token, user: data.user }))
+            localStorage.setItem('token', data.token)
+
+            toast.success(data.message || "Success")
+
+            dispatch(setLoading(false))
+            navigate('/app')
+
         } catch (error) {
-            const serverMsg = error.response?.data?.message || error.message
+
+            const serverMsg =
+                error.response?.data?.message || error.message
+
             console.error('Auth error response:', error.response?.data || error.message)
-            // If user already exists, switch to login view and keep email filled
+
             if (serverMsg && serverMsg.toLowerCase().includes('user already')) {
                 toast.error(serverMsg + '. Please login.')
                 setState('login')
             } else {
-                toast.error(serverMsg)
+                toast.error(serverMsg || "Something went wrong")
             }
-        } finally {
+
             dispatch(setLoading(false))
         }
-
-
     }
 
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData(prev => ({ ...prev, [name]: value }))
     }
-  return (
- <div className='flex items-center justify-center min-h-screen bg-gray-50'>
 
-    <form onSubmit={handleSubmit} className="sm:w-[350px] w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white">
-                <h1 className="text-gray-900 text-3xl mt-10 font-medium">{state === "login" ? "Login" : "Sign up"}</h1>
-                <p className="text-gray-500 text-sm mt-2">Please {state} to continue</p>
+    return (
+        <div className='flex items-center justify-center min-h-screen bg-gray-50'>
+            <form onSubmit={handleSubmit}
+                className="sm:w-[350px] w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white">
+
+                <h1 className="text-gray-900 text-3xl mt-10 font-medium">
+                    {state === "login" ? "Login" : "Sign up"}
+                </h1>
+
+                <p className="text-gray-500 text-sm mt-2">
+                    Please {state} to continue
+                </p>
+
                 {state !== "login" && (
-                    <div className="flex items-center mt-6 w-full bg-white border border-gray-300/80 h-12 
-                    rounded-full overflow-hidden pl-6 gap-2">
-                           <User2Icon size={16} color='#6B7280' />
-
-                        <input type="text" name="name" placeholder="Name" className="border-none outline-none ring-0" value={formData.name} onChange={handleChange} required />
+                    <div className="flex items-center mt-6 w-full bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
+                        <User2Icon size={16} color='#6B7280' />
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Name"
+                            className="border-none outline-none ring-0"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
                 )}
+
                 <div className="flex items-center w-full mt-4 bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
-                        <Mail size={13} color='#6B7280' />
-                    <input type="email" name="email" placeholder="Email id" className="border-none outline-none ring-0" value={formData.email} onChange={handleChange} required />
+                    <Mail size={13} color='#6B7280' />
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email id"
+                        className="border-none outline-none ring-0"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
+
                 <div className="flex items-center mt-4 w-full bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
                     <Lock size={13} color='#6B7280' />
-                    <input type="password" name="password" placeholder="Password" className="border-none outline-none ring-0" value={formData.password} onChange={handleChange} required />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        className="border-none outline-none ring-0"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
+
                 <div className="mt-4 text-left text-green-500">
-                    <button className="text-sm" type="reset">Forget password?</button>
+                    <button className="text-sm" type="reset">
+                        Forget password?
+                    </button>
                 </div>
-                <button type="submit" className="mt-2 w-full h-11 rounded-full text-white bg-green-500 hover:opacity-90 transition-opacity">
+
+                <button
+                    type="submit"
+                    className="mt-2 w-full h-11 rounded-full text-white bg-green-500 hover:opacity-90 transition-opacity">
                     {state === "login" ? "Login" : "Sign up"}
                 </button>
-                <p onClick={() => setState(prev => prev === "login" ? "register" : "login")} className="text-gray-500 text-sm mt-3 mb-11">{state === "login" ? "Don't have an account?" : "Already have an account?"} <a href="#" className="text-green-500 hover:underline">click here</a></p>
+
+                <p
+                    onClick={() =>
+                        setState(prev => prev === "login" ? "register" : "login")
+                    }
+                    className="text-gray-500 text-sm mt-3 mb-11">
+
+                    {state === "login"
+                        ? "Don't have an account?"
+                        : "Already have an account?"}
+
+                    <span className="text-green-500 hover:underline cursor-pointer">
+                        click here
+                    </span>
+                </p>
             </form>
- </div>
-  )
+        </div>
+    )
 }
 
 export default Login;

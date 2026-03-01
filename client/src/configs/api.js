@@ -1,4 +1,8 @@
+
 import axios from "axios";
 
-axios.get("https://your-backend-name.onrender.com/api/user")
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+});
+
 export default api;
