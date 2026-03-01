@@ -7,25 +7,28 @@ import userRouter from './routes/userRoutes.js'
 import aiRouter from "./routes/aiRoutes.js"
 import resumeRouter from './routes/resumeroutes.js'
 import requestLogger from './middlewares/requestLogger.js'
-//  database connection 
+
+// Database connection
 await connectDB();
 
-
-
 const app = express()
-const PORT = process.env.PORT ||3000 ;
+const PORT = process.env.PORT || 3000;
+
+// Middlewares
 app.use(express.json())
 app.use(requestLogger)
-app.use(cors())
-app.get('/',(req,res)=>res.send("server is running"))
-app.use('/api/users', userRouter)
-app.use('/api/resumes', resumeRouter)
-app.use('/api/ai',aiRouter)
-import cors from "cors";
 
+// CORS (only once 🔥)
 app.use(cors({
-  origin: "https://your-frontend-name.vercel.app",
+  origin: "https://resume-builder-c616.vercel.app",
   credentials: true
 }));
-app.use(cors());
-app.listen(PORT,()=>console.log(`server is running on port ${PORT}`))
+
+// Routes
+app.get('/', (req, res) => res.send("Server is running"))
+app.use('/api/users', userRouter)
+app.use('/api/resumes', resumeRouter)
+app.use('/api/ai', aiRouter)
+
+// Start server
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
