@@ -19,11 +19,15 @@ app.use(express.json())
 app.use(requestLogger)
 
 // CORS (only once 🔥)
-app.use(cors({
-  origin: "https://resume-builder-c616.vercel.app",
-  credentials: true
-}));
-
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://resume-builder-c616.vercel.app"
+    ],
+    credentials: true,
+  })
+);
 // Routes
 app.get('/', (req, res) => res.send("Server is running"))
 app.use('/api/users', userRouter)
