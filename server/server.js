@@ -20,16 +20,19 @@ app.use(requestLogger)
 
 // CORS (only once 🔥)
 
-app.use(cors({
+const corsOptions = {
   origin: [
-    "http://localhost:5173",
-    "https://resumebuilder-m4rqxjrvd-vishalborude666s-projects.vercel.app",
-    "https://resumebuilder-vishalborude666s-projects.vercel.app"
+    'http://localhost:5173',
+    'https://resumebuilder-m4rqxjrvd-vishalborude666s-projects.vercel.app',
+    'https://resumebuilder-vishalborude666s-projects.vercel.app'
   ],
   credentials: true
-}));
+};
+app.use(cors(corsOptions));
+// register preflight handler using '/*' (avoids passing '*' directly to path-to-regexp)
+app.options('/*', cors(corsOptions));
 
-app.options("*", cors());
+
 // Routes
 app.get('/', (req, res) => res.send("Server is running"))
 app.use('/api/users', userRouter)
