@@ -23,7 +23,10 @@ app.use(requestLogger)
 const corsOptions = {
   origin: [
     'http://localhost:5173',
-'resume-builder-c616.vercel.app'
+    'https://resume-builder-c616.vercel.app',
+    'https://resumebuilder-c616.vercel.app',
+    'https://resumebuilder-m4rqxjrvd-vishalborude666s-projects.vercel.app',
+    'https://resumebuilder-vishalborude666s-projects.vercel.app'
   ],
   credentials: true
 };
