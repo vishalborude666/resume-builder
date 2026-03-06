@@ -20,16 +20,17 @@ app.use(requestLogger)
 
 // CORS (only once 🔥)
 
-const corsOptions = {
-  origin: [
-    'http://localhost:5173',
-    'https://resume-builder-c616.vercel.app',
-    'https://resumebuilder-c616.vercel.app',
-    'https://resumebuilder-m4rqxjrvd-vishalborude666s-projects.vercel.app',
-    'https://resumebuilder-vishalborude666s-projects.vercel.app'
-  ],
-  credentials: true
-};
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://resume-builder-eight-liart.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+  })
+);
 app.use(cors(corsOptions));
 // register a safe OPTIONS handler that runs the CORS middleware without using a path pattern
 app.use((req, res, next) => {
