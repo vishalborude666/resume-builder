@@ -1,16 +1,13 @@
-import axios from "axios";
+import axios from 'axios'
+
+// Use Vite environment variable VITE_API_URL; fall back to empty string (relative URLs)
+const rawBase = import.meta.env.VITE_API_URL || ''
+// strip surrounding quotes if present
+const baseURL = String(rawBase).replace(/^"|"$/g, '')
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: baseURL || '', // empty = use same origin (works well on Vercel)
   withCredentials: true,
-});
+})
 
-// debug: expose to window and log type to help diagnose "api.post is not a function"
-if (typeof window !== 'undefined') {
-  // attach for quick inspection in browser console
-  window.__api_instance = api;
-}
-
-console.log('configs/api -> axios instance:', api);
-
-export default api;
+export default api
