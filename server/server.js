@@ -29,8 +29,14 @@ const corsOptions = {
   credentials: true
 };
 app.use(cors(corsOptions));
-// register preflight handler using '/*' (avoids passing '*' directly to path-to-regexp)
-app.options('/*', cors(corsOptions));
+// register a safe OPTIONS handler that runs the CORS middleware without using a path pattern
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    // run CORS for this preflight request then end with 204 No Content
+    return cors(corsOptions)(req, res, () => res.sendStatus(204));
+  }
+  next();
+});
 
 
 // Routes
