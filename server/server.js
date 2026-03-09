@@ -13,28 +13,25 @@ const PORT = process.env.PORT || 3000;
 // Allowed Frontend URLs
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://resume-builder-eight-liart.vercel.app"
+  "https://resume-builder-eight-liart.vercel.app",
+  "https://resume-builder-c616-vishalborude666s-projects.vercel.app"
 ];
 
 // CORS Middleware
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "https://resume-builder-c616-vishalborude666s-projects.vercel.app"
-      ];
-
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
-app.options("*", cors());
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 // Body parser
 app.use(express.json());
 
