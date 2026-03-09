@@ -14,32 +14,23 @@ await connectDB();
 const app = express()
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
-app.use(express.json())
-app.use(requestLogger)
+// CORS – must be registered before any other middleware so preflight
+// OPTIONS requests get the correct headers immediately.
+const corsOptions = {
+  origin: [
+    "http://localhost:5173",
+    "https://resume-builder-eight-liart.vercel.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+};
 
-// CORS (only once 🔥)
-
-
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://resume-builder-eight-liart.vercel.app"
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-  })
-);
 app.use(cors(corsOptions));
-// register a safe OPTIONS handler that runs the CORS middleware without using a path pattern
-app.use((req, res, next) => {
-  if (req.method === 'OPTIONS') {
-    // run CORS for this preflight request then end with 204 No Content
-    return cors(corsOptions)(req, res, () => res.sendStatus(204));
-  }
-  next();
-});
+
+// Other middlewares
+app.use(express.json());
+app.use(requestLogger);
 
 
 // Routes
