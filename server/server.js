@@ -44,7 +44,7 @@ app.use(cors({
 // Other middlewares
 app.use(express.json());
 app.use(requestLogger);
-
+app.use(cors());
 // Routes
 app.get('/', (req, res) => res.send("Server is running"))
 app.use('/api/users', userRouter)
