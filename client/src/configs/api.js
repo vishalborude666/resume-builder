@@ -1,13 +1,23 @@
-import axios from 'axios'
+import axios from "axios";
 
-// Use Vite environment variable VITE_API_URL; fall back to empty string (relative URLs)
-const rawBase = import.meta.env.VITE_API_URL || ''
-// strip surrounding quotes if present
-const baseURL = String(rawBase).replace(/^"|"$/g, '')
+// Get API URL from Vite environment variable
+const baseURL = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "";
 
 const api = axios.create({
-  baseURL: baseURL || '', // empty = use same origin (works well on Vercel)
+  baseURL,
   withCredentials: true,
-})
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-export default api
+// Automatically attach Bearer token to every request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default api;
