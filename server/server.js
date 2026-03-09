@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 // Allowed Frontend URLs
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://resume-builder-lvfw.onrender.com",
   "https://resume-builder-eight-liart.vercel.app",
   "https://resume-builder-c616-vishalborude666s-projects.vercel.app"
 ];
